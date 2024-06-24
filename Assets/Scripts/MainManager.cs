@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -72,5 +73,21 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+
+        if (m_Points > PlayerDataHandle.Instance.Score)
+        {
+            Debug.Log("Congrulations New High Score!");
+            PlayerDataHandle.Instance.Score = m_Points;
+            SaveScore();
+        }
+    }
+    public void SaveScore()
+    {
+        SaveData data = new SaveData();
+        data.Score = PlayerDataHandle.Instance.Score;
+
+        string json = JsonUtility.ToJson(data);
+
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }
 }

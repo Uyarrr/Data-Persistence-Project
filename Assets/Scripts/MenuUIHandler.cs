@@ -10,8 +10,11 @@ using TMPro;
 public class MenuUIHandler : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI welcometext;
-    private MainManager mainManager;
 
+    public void Start()
+    {
+        welcometext.text = "Welcome " + PlayerDataHandle.Instance.Username + "!";
+    }
     public void StartGameButton()
     {
         SceneManager.LoadScene(1);
@@ -27,5 +30,7 @@ public class MenuUIHandler : MonoBehaviour
     {
         PlayerDataHandle.Instance.Username = s;
         welcometext.text = "Welcome " + PlayerDataHandle.Instance.Username + "!";
+        PlayerDataHandle.Instance.SaveStats();
+        //Debug.Log(Application.persistentDataPath);
     }
 }

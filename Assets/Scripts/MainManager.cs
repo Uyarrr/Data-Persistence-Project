@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class MainManager : MonoBehaviour
@@ -12,13 +13,13 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text HighScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
     private int m_Points;
     
     private bool m_GameOver = false;
-
     
     // Start is called before the first frame update
     void Start()
@@ -37,8 +38,9 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
-    }
 
+        UpdateBestScoreText();
+    }
     private void Update()
     {
         if (!m_Started)
@@ -78,16 +80,19 @@ public class MainManager : MonoBehaviour
         {
             Debug.Log("Congrulations New High Score!");
             PlayerDataHandle.Instance.Score = m_Points;
-            SaveScore();
+            PlayerDataHandle.Instance.SaveStats();
         }
     }
-    public void SaveScore()
+
+    private void UpdateBestScoreText()
     {
-        SaveData data = new SaveData();
-        data.Score = PlayerDataHandle.Instance.Score;
-
-        string json = JsonUtility.ToJson(data);
-
-        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+        if (PlayerDataHandle.Instance.Username == null && PlayerDataHandle.Instance.Score == 0)
+        {
+            HighScoreText.text = "";
+        }
+        else
+        {
+            HighScoreText.text = $"Best Score - {PlayerDataHandle.Instance.Username}: {PlayerDataHandle.Instance.Score}";
+        }
     }
 }

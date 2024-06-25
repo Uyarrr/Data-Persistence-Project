@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class PlayerDataHandle : MonoBehaviour
@@ -8,7 +9,6 @@ public class PlayerDataHandle : MonoBehaviour
     //Singleton pattern
 
     public static PlayerDataHandle Instance;
-    private LoadGameStats loadgamestats;
     public string Username;
     public int Score;
 
@@ -21,10 +21,35 @@ public class PlayerDataHandle : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        LoadStats();
     }
-}
+    public void SaveStats()
+    {
+        SaveData data = new SaveData();
+        data.Username = Instance.Username;
+        data.Score = Instance.Score;
+
+        string json = JsonUtility.ToJson(data);
+
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+    }
+    public void LoadStats()
+    {
+        string path = Application.persistentDataPath + "/savefile.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+            Instance.Username = data.Username;
+            Instance.Score = data.Score;
+        }
+    }
+}   
+
 [System.Serializable]
 public class SaveData
 {
+    public string Username;
     public int Score;
 }

@@ -10,7 +10,8 @@ public class PlayerDataHandle : MonoBehaviour
 
     public static PlayerDataHandle Instance;
     public string Username;
-    public int Score;
+    public string BestUsername;
+    public int Score; 
 
     private void Awake()
     {
@@ -27,6 +28,7 @@ public class PlayerDataHandle : MonoBehaviour
     {
         SaveData data = new SaveData();
         data.Username = Instance.Username;
+        data.BestUsername = Instance.BestUsername;
         data.Score = Instance.Score;
 
         string json = JsonUtility.ToJson(data);
@@ -43,6 +45,7 @@ public class PlayerDataHandle : MonoBehaviour
 
             Instance.Username = data.Username;
             Instance.Score = data.Score;
+            Instance.BestUsername = data.BestUsername;
         }
     }
 }   
@@ -52,4 +55,5 @@ public class SaveData
 {
     public string Username;
     public int Score;
+    public string BestUsername;
 }

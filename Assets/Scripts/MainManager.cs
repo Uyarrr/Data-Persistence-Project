@@ -80,6 +80,7 @@ public class MainManager : MonoBehaviour
         {
             Debug.Log("Congrulations New High Score!");
             PlayerDataHandle.Instance.Score = m_Points;
+            PlayerDataHandle.Instance.BestUsername = PlayerDataHandle.Instance.Username;
             PlayerDataHandle.Instance.SaveStats();
         }
     }
@@ -92,7 +93,7 @@ public class MainManager : MonoBehaviour
         }
         else
         {
-            HighScoreText.text = $"Best Score - {PlayerDataHandle.Instance.Username}: {PlayerDataHandle.Instance.Score}";
+            HighScoreText.text = $"Best Score - {PlayerDataHandle.Instance.BestUsername}: {PlayerDataHandle.Instance.Score}";
         }
     }
 }
